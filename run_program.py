@@ -13,7 +13,7 @@ def add_new_team(teams):
     while True:
         team_name = get_team_name()
         team_id = get_team_id()
-        if check_if_exists_id(team_id,teams) and check_if_exists_name(team_name,teams):
+        if check_if_exists_id(team_id,teams) or check_if_exists_name(team_name,teams):
             team = create_team(team_name,team_id)
             teams = add_team(team,teams)
             return teams
