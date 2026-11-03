@@ -26,7 +26,7 @@ def get_team_id(team_type:str | None = None):
 
 def get_goals(team_type):
     while True:
-        goals_num = get_input(f"enter number of goals for {team_type}", "goals number")
+        goals_num = get_input(f"enter number of goals for {team_type}: ", "goals number")
         if check_num(goals_num):
             return goals_num
         print("the goals number must be a hole positive number")
