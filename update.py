@@ -15,17 +15,17 @@ def add_match(match:dict,matches):
     matches.append(match)
     return matches 
 
-def set_goals_against(team,match):
-    if team["id"] == match["home_team_id"]:
-        team["goals_against"] += int(match["away_goals"])
-    else:
-        team["goals_against"] += int(match["home_goals"])
+def set_goals_against(teams,match):
+    for team in teams:
+        if team["id"] == match["home_team_id"]:
+            team["goals_against"] += int(match["away_goals"])
+        elif team["id"] == match["away_team_id"]:
+            team["goals_against"] += int(match["home_goals"])
 
 
 def update_team_data(team_type,teams,match):
     winner,looser = check_win(match)
     for team in teams:
-        set_goals_against(team,match)
         if team["id"] == match[f"{team_type}_team_id"]:
             team["played"] += 1
             team["goals_for"] += int(match[f"{team_type}_goals"])

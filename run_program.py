@@ -1,7 +1,7 @@
 from user_inouts import get_team_name,get_team_id,get_goals
-from update import create_team,create_match,add_match,update_team_data,sort_teams,add_goal_diff
+from update import create_team,create_match,add_match,update_team_data,sort_teams,add_goal_diff,set_goals_against
 from validations import check_if_exists_id,check_if_exists_name,check_same_id,check_played
-from storage import add_team_flow,save_to_json,add_to_json,played_file,teams_file
+from storage import save_to_json,add_to_json,played_file,teams_file
 from helpers import get_best_attacking_teams,get_best_attacking_team
 import logging
 
@@ -26,7 +26,8 @@ def add_new_team_flow(teams):
         team_id = get_team_id()
         if check_if_exists_id(team_id,teams) or check_if_exists_name(team_name,teams):
             team = create_team(team_name,team_id)
-            add_team_flow(team)
+            add_to_json(teams,team)
+            save_to_json(teams_file,teams)
             return teams
         print("name or id already exists")
 
@@ -62,6 +63,7 @@ def add_result_flow(results,teams,played):
         add_match(match,results)
         update_team_data("home",teams,match)
         update_team_data("away",teams,match)
+        set_goals_against(teams,match)
         save_to_json(teams_file,teams)
         add_to_json(played,[home_team_id,away_team_id])
         save_to_json(played_file,played)
