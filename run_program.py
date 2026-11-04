@@ -9,7 +9,7 @@ def show_menu():
             return choise
         print("not valid choise")
 
-def add_new_team(teams):
+def add_new_team_flow(teams):
     while True:
         team_name = get_team_name()
         team_id = get_team_id()
@@ -19,7 +19,10 @@ def add_new_team(teams):
             return teams
         print("name or id already exists")
 
-def add_result(results,teams):
+def add_result_flow(results,teams):
+    if not teams:
+        print("no teams yet!")
+        return
     while True:
         home_team_id = get_team_id("home")
         away_team_id = get_team_id("away")
@@ -29,7 +32,7 @@ def add_result(results,teams):
         if not check_played(home_team_id,teams) or not check_played(away_team_id,teams):
             print("one of the teams had playes already")
             continue
-        if not check_if_exists_id(home_team_id,teams) and not check_if_exists_id(away_team_id,teams):
+        if check_if_exists_id(home_team_id,teams) or check_if_exists_id(away_team_id,teams):
             print("id not found")
             continue
         home_goals = get_goals("home team")
@@ -39,6 +42,13 @@ def add_result(results,teams):
         update_team_data("home",teams,match)
         update_team_data("away",teams,match)
         return matches
+
+def show_teams(teams):
+    if teams:
+        print(teams)
+    else:
+        print("no teams yet!")
+
 
 
 

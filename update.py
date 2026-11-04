@@ -1,4 +1,4 @@
-from helpers import set_goals_against,check_win
+from helpers import check_win
 
 def create_team(team_name,team_id):
     team = {"id":team_id,"name":team_name,"played":0,"wins":0,"draws":0,
@@ -17,6 +17,12 @@ def create_match(home_id,away_id,home_goals,away_goals):
 def add_match(match:dict,matches):
     matches.append(match)
     return matches 
+
+def set_goals_against(team,match):
+    if team["id"] == match["home_team_id"]:
+        team["goals_against"] = match["away_goals"]
+    else:
+        team["goals_against"] = match["home_goals"]
 
 
 def update_team_data(team_type,teams,match):
