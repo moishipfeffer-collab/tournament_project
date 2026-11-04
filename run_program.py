@@ -1,12 +1,14 @@
 from user_inouts import get_team_name,get_team_id,get_goals
-from update import create_team,add_team,create_match,add_match,update_team_data,sort_teams,add_played,add_goal_diff
+from update import create_team,create_match,add_match,update_team_data,sort_teams,add_played,add_goal_diff
 from validations import check_if_exists_id,check_if_exists_name,check_same_id,check_played
+from storage import add_team_flow,load_teams,save_teams
+from helpers import get_best_attacking_teams,get_best_attacking_team
 
 def show_menu():
     while True:
         choise = input("\n========== TOURNAMENT MANAGER ==========\n1. add taem\n2. show all teams\n3. add match result\n4. show sorted teams\n"
-        "5. show leading team\n6. show best attacking team\n7. show team succes rate\n8. show teams without wins\n9. show rouenament summary\n0. exit\nchoose an option: ")
-        if choise in ["1","2","3","4","5","6","7","8","9","10","0"]:
+        "5. show leading team\n6. show best attacking team\n7. show team succes rate\n8. show teams without wins\n9. show touenament summary\n0. exit\nchoose an option: ")
+        if choise in ["1","2","3","4","5","6","7","8","9","0"]:
             return choise
         print("not valid choise")
 
@@ -18,7 +20,7 @@ def add_new_team_flow(teams):
         team_id = get_team_id()
         if check_if_exists_id(team_id,teams) or check_if_exists_name(team_name,teams):
             team = create_team(team_name,team_id)
-            teams = add_team(team,teams)
+            add_team_flow(team)
             return teams
         print("name or id already exists")
 
@@ -33,6 +35,7 @@ def show_teams(teams):
 # option 3 add match
 
 def add_result_flow(results,teams,played):
+    teams = load_teams()
     if not teams:
         print("no teams yet!")
         return
@@ -54,6 +57,7 @@ def add_result_flow(results,teams,played):
         add_match(match,results)
         update_team_data("home",teams,match)
         update_team_data("away",teams,match)
+        save_teams(teams)
         add_played(home_team_id,away_team_id,played)
         return 
 
@@ -61,7 +65,7 @@ def add_result_flow(results,teams,played):
   
 def show_sort_team_flow(teams):
     if not teams:
-        print("no teams yet")
+        print("no teams yet!")
     else:
         sorted_teams = sort_teams(teams)
         add_goal_diff(sorted_teams)
@@ -79,17 +83,10 @@ def show_liding_team(teams):
 
 # option 6 show best attack 
 
-def show_best_attacking_team(teams):
-    if not teams:
-        print("no teams yet!")
-    else:
-        highest = 0
-        best_teams = []
-        for team in teams:
-            if int(team["goals_for"]) >= int(highest):
-                highest = team["goals_for"]
-                best_teams.append(team)
-        print(f"\nthe best team is:\n{best_teams[0]}")
+def show_best_teams(teams):
+    best_team = get_best_attacking_team(teams)
+    best_teams = get_best_attacking_teams(best_team,teams)
+    print(f"\nthe best teams are:\n{best_teams}")
 
 # option 7 show succes rate
 
@@ -101,8 +98,8 @@ def show_succes_rate(teams):
     print("\n=== succes rate ===")
     no_games = []
     for team in teams:
-        if team["played"] != 0:
-            print(f"{team['name']}: {team['points'] / (team['played'] * 3) * 100} %")
+        if int(team["played"]) > 0:
+            print(f"{team['name']}: {int(team['points']) / int((team['played'] * 3)) * 100} %")
         else:
             no_games.append(team["name"])
         show_no_games(no_games)
@@ -128,10 +125,10 @@ def get_game_summary(teams):
         goals_num += int(team["goals_for"])
         drow += int(team["draws"])
     try:
-        goals_avg = goals_num / games_num
+        goals_avg = goals_num / (games_num / 2)
     except ZeroDivisionError:
         return False
-    return [teams_num,games_num,goals_num,drow / 2,goals_avg]
+    return [teams_num,games_num / 2,goals_num,drow / 2,goals_avg]
 
 def show_game_summary(teams):
     if not teams:
@@ -141,11 +138,11 @@ def show_game_summary(teams):
         print("no games yet!")
     else:
         print()
-        print("the game summary is:")
+        print("=== the game summary is: ===")
         print(f"teams: {summary[0]}")
-        print(f"games: {summary[1]}")
+        print(f"games: {int(summary[1])}")
         print(f"goals: {summary[2]}")
-        print(f"drows: {summary[3]}")
+        print(f"drows: {int(summary[3])}")
         print(f"goals avg: {summary[4]}")
         show_liding_team(teams)
 
@@ -193,5 +190,3 @@ def show_game_summary(teams):
 
 
 
-
-        

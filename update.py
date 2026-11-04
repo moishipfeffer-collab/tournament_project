@@ -5,9 +5,6 @@ def create_team(team_name,team_id):
             "losses":0,"goals_for":0,"goals_against":0,"points":0}
     return team
 
-def add_team(team:dict,teams:list):
-    teams.append(team)  
-    return teams
 
 def create_match(home_id,away_id,home_goals,away_goals):
     match = {"home_team_id":home_id,"away_team_id":away_id,
@@ -20,9 +17,9 @@ def add_match(match:dict,matches):
 
 def set_goals_against(team,match):
     if team["id"] == match["home_team_id"]:
-        team["goals_against"] = match["away_goals"]
+        team["goals_against"] += int(match["away_goals"])
     else:
-        team["goals_against"] = match["home_goals"]
+        team["goals_against"] += int(match["home_goals"])
 
 
 def update_team_data(team_type,teams,match):
@@ -30,17 +27,19 @@ def update_team_data(team_type,teams,match):
     for team in teams:
         set_goals_against(team,match)
         if team["id"] == match[f"{team_type}_team_id"]:
-            team["played"] = 1
-            team["goals_for"] = match[f"{team_type}_goals"]
+            team["played"] += 1
+            team["goals_for"] += int(match[f"{team_type}_goals"])
         if winner == team_type:
             if team["id"] == match[f"{team_type}_team_id"]:
-                team["wins"] = 1
-                team["points"] = 3
+                team["wins"] += 1
+                team["points"] += 3
         elif looser == team_type:
             if team["id"] == match[f"{team_type}_team_id"]:
-                team["losses"] = 1
+                team["losses"] += 1
         else:
-            team["points"] = 1
+            if team["id"] == match[f"{team_type}_team_id"]:
+                team["points"] += 1
+                team["draws"] +=1
 
 def add_played(home_id,away_id,played:list):
     played.append([home_id,away_id])
