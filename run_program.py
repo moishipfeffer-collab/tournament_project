@@ -131,7 +131,7 @@ def get_game_summary(teams):
         goals_avg = goals_num / games_num
     except ZeroDivisionError:
         return False
-    return [teams_num,games_num,goals_num,drow / 2,goals_avg]
+    return [teams_num,games_num / 2,goals_num,drow / 2,goals_avg]
 
 def show_game_summary(teams):
     if not teams:
