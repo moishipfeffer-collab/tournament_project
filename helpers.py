@@ -6,8 +6,3 @@ def check_win(match:dict):
     else:
         return "drow"
 
-def set_goals_against(team,match):
-    if team["id"] == match["home_team_id"]:
-        team["goals_against"] = match["away_goals"]
-    else:
-        team["goals_against"] = match["home_goals"]

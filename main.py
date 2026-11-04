@@ -1,4 +1,4 @@
-from run_program import add_new_team,show_menu,add_result
+from run_program import add_new_team_flow,show_menu,show_teams,add_result_flow
 
 def main():
     teams = []
@@ -6,14 +6,11 @@ def main():
     while True:
         choise = show_menu()
         if choise == "1":
-            teams = add_new_team(teams)
+            teams = add_new_team_flow(teams)
         elif choise == "2":
-            if teams:
-                print(teams)
-            else:
-                print("the team list is empty")
+            show_teams(teams)
         elif choise == "3":
-            add_result(results,teams)
+            add_result_flow(results,teams)
         elif choise == "4":
             pass
         elif choise == "0":
