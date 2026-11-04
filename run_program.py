@@ -1,8 +1,13 @@
 from user_inouts import get_team_name,get_team_id,get_goals
-from update import create_team,create_match,add_match,update_team_data,sort_teams,add_played,add_goal_diff
+from update import create_team,create_match,add_match,update_team_data,sort_teams,add_goal_diff
 from validations import check_if_exists_id,check_if_exists_name,check_same_id,check_played
-from storage import add_team_flow,load_teams,save_teams
+from storage import add_team_flow,save_to_json,add_to_json,played_file,teams_file
 from helpers import get_best_attacking_teams,get_best_attacking_team
+import logging
+
+logging.basicConfig(level=logging.INFO,format="%(levelname)s %(message)s")
+
+
 
 def show_menu():
     while True:
@@ -10,7 +15,8 @@ def show_menu():
         "5. show leading team\n6. show best attacking team\n7. show team succes rate\n8. show teams without wins\n9. show touenament summary\n0. exit\nchoose an option: ")
         if choise in ["1","2","3","4","5","6","7","8","9","0"]:
             return choise
-        print("not valid choise")
+        logging.error("nor valid choise")
+
 
 # option 1 add team
 
@@ -35,7 +41,6 @@ def show_teams(teams):
 # option 3 add match
 
 def add_result_flow(results,teams,played):
-    teams = load_teams()
     if not teams:
         print("no teams yet!")
         return
@@ -47,7 +52,7 @@ def add_result_flow(results,teams,played):
             continue
         if not check_played(home_team_id,away_team_id,played):
             print("the teams hade played already")
-            continue
+            return
         if check_if_exists_id(home_team_id,teams) or check_if_exists_id(away_team_id,teams):
             print("id not found")
             continue
@@ -57,8 +62,9 @@ def add_result_flow(results,teams,played):
         add_match(match,results)
         update_team_data("home",teams,match)
         update_team_data("away",teams,match)
-        save_teams(teams)
-        add_played(home_team_id,away_team_id,played)
+        save_to_json(teams_file,teams)
+        add_to_json(played,[home_team_id,away_team_id])
+        save_to_json(played_file,played)
         return 
 
 # option 4 show sorted teams
@@ -144,7 +150,8 @@ def show_game_summary(teams):
         print(f"goals: {summary[2]}")
         print(f"drows: {int(summary[3])}")
         print(f"goals avg: {summary[4]}")
-        show_liding_team(teams)
+        sorted_teams = sort_teams(teams)
+        print(f"the leading team:\n{sorted_teams[0]['name']} with {sorted_teams[0]['points']} points")
 
 
 
