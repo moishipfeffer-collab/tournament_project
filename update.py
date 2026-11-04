@@ -41,6 +41,17 @@ def update_team_data(team_type,teams,match):
                 team["losses"] = 1
         else:
             team["points"] = 1
-    
 
+def add_played(home_id,away_id,played:list):
+    played.append([home_id,away_id])
+    return played
+
+
+def sort_teams(teams:list):
+    sorted_teams = sorted(teams,key=lambda t: (t["points"], int(t["goals_for"]) - int(t["goals_against"]),t["goals_for"],t["name"]),reverse=True)
+    return sorted_teams
+
+def add_goal_diff(sorted_teams):
+    for team in sorted_teams:
+        team["goals_diff"] = int(team["goals_for"]) - int(team["goals_against"])
 
