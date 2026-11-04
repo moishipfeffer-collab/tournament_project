@@ -1,12 +1,13 @@
 from run_program import add_new_team_flow,show_menu,show_teams,add_result_flow,show_sort_team_flow,show_liding_team
 from run_program import show_best_teams,show_succes_rate,show_losseres,show_game_summary
-from storage import load_teams
+from storage import load_from_json,teams_file,played_file
 
 def main():
     results = []
     played = []
     while True:
-        teams = load_teams()
+        teams = load_from_json(teams_file)
+        played = load_from_json(played_file)
         choise = show_menu()
         if choise == "1":
             teams = add_new_team_flow(teams)
@@ -27,6 +28,7 @@ def main():
         elif choise == "9":
             show_game_summary(teams)
         elif choise == "0":
+            print("goodby!")
             break
 
 if __name__ == "__main__":
