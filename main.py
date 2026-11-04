@@ -1,11 +1,12 @@
 from run_program import add_new_team_flow,show_menu,show_teams,add_result_flow,show_sort_team_flow,show_liding_team
-from run_program import show_best_attacking_team,show_succes_rate,show_losseres,show_game_summary
+from run_program import show_best_teams,show_succes_rate,show_losseres,show_game_summary
+from storage import load_teams
 
 def main():
-    teams = []
     results = []
     played = []
     while True:
+        teams = load_teams()
         choise = show_menu()
         if choise == "1":
             teams = add_new_team_flow(teams)
@@ -18,7 +19,7 @@ def main():
         elif choise == "5":
             show_liding_team(teams)
         elif choise == "6":
-            show_best_attacking_team(teams)
+            show_best_teams(teams)
         elif choise == "7":
             show_succes_rate(teams)
         elif choise == "8":
@@ -27,7 +28,6 @@ def main():
             show_game_summary(teams)
         elif choise == "0":
             break
-
 
 if __name__ == "__main__":
     main()

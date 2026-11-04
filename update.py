@@ -5,9 +5,6 @@ def create_team(team_name,team_id):
             "losses":0,"goals_for":0,"goals_against":0,"points":0}
     return team
 
-def add_team(team:dict,teams:list):
-    teams.append(team)  
-    return teams
 
 def create_match(home_id,away_id,home_goals,away_goals):
     match = {"home_team_id":home_id,"away_team_id":away_id,
@@ -40,7 +37,9 @@ def update_team_data(team_type,teams,match):
             if team["id"] == match[f"{team_type}_team_id"]:
                 team["losses"] += 1
         else:
-            team["points"] += 1
+            if team["id"] == match[f"{team_type}_team_id"]:
+                team["points"] += 1
+                team["draws"] +=1
 
 def add_played(home_id,away_id,played:list):
     played.append([home_id,away_id])
