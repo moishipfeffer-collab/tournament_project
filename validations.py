@@ -22,17 +22,15 @@ def check_if_exists_name(name:str,teams:list):
             return False
     return True
 
-    
 def check_same_id(home,away):
     if home == away:
         return False
     return True
 
-def check_played(id,teams):
-    for team in teams:
-        if team["id"] == id:
-            if team["played"] > 0:
-                return False
+def check_played(home_id,away_id,played):
+    for teams in played:
+        if home_id in teams and away_id in teams:
+            return False
     return True
 
 
