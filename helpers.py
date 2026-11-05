@@ -27,9 +27,15 @@ def get_best_attacking_teams(best_team,teams):
             best_teams.append(team)
     return best_teams
 
-
-
-
+def handel_error(message):
+    print(message)
+    while True:
+        choise = input("1. continue\n2. return\nenter an option (1/2): ")
+        if choise == "1":
+            return "continue"
+        elif choise == "2":
+            return "return"
+        print("not valid choise")
 
 
 

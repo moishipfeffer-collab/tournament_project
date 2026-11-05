@@ -2,7 +2,7 @@ from user_inouts import get_team_name,get_team_id,get_goals
 from update import create_team,create_match,add_match,update_team_data,sort_teams,add_goal_diff,set_goals_against
 from validations import check_if_exists_id,check_if_exists_name,check_same_id,check_played
 from storage import save_to_json,add_to_json,played_file,teams_file
-from helpers import get_best_attacking_teams,get_best_attacking_team
+from helpers import get_best_attacking_teams,get_best_attacking_team,handel_error
 import logging
 
 logging.basicConfig(level=logging.INFO,format="%(levelname)s %(message)s")
@@ -29,7 +29,8 @@ def add_new_team_flow(teams):
             add_to_json(teams,team)
             save_to_json(teams_file,teams)
             return teams
-        print("name or id already exists")
+        if handel_error("name or id already exists") == "return":
+            return
 
 # option 2 show all teams
 
@@ -49,13 +50,16 @@ def add_result_flow(results,teams,played):
         home_team_id = get_team_id("home")
         away_team_id = get_team_id("away")
         if not check_same_id(home_team_id,away_team_id):
-            print("the id nust be diffrent")
+            if handel_error("the id nust be diffrent") == "return":
+                return
             continue
         if not check_played(home_team_id,away_team_id,played):
-            print("the teams hade played already")
-            return
+            if handel_error("the teams hade played already") == "return":
+                return
+            continue
         if check_if_exists_id(home_team_id,teams) or check_if_exists_id(away_team_id,teams):
-            print("id not found")
+            if handel_error("id not found") == "return":
+                return
             continue
         home_goals = get_goals("home team")
         away_goals = get_goals("away team")

@@ -4,13 +4,12 @@ from storage import load_from_json,teams_file,played_file
 
 def main():
     results = []
-    played = []
     while True:
         teams = load_from_json(teams_file)
         played = load_from_json(played_file)
         choise = show_menu()
         if choise == "1":
-            teams = add_new_team_flow(teams)
+            teams = add_new_team_flow(teams) 
         elif choise == "2":
             show_teams(teams)
         elif choise == "3":

@@ -14,7 +14,7 @@ def load_from_json(file_type):
         with open(file_type,"r") as file:
             return json.load(file)
     except json.JSONDecodeError:
-        logging.error("the json file is empty")
+        logging.error(f"the file {file_type} is empty")
         return []
 
     
@@ -26,10 +26,7 @@ def add_to_json(json_oiginal,json_add):
     json_oiginal.append(json_add)
     return json_oiginal
 
-def add_team_flow(team):
-    team_list = load_from_json(teams_file)
-    teams = add_to_json(team_list,team)
-    save_to_json(teams_file,teams)
+
 
 
     
